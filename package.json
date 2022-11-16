@@ -1,0 +1,36 @@
+{
+  "name": "bienesraices_mvc",
+  "version": "1.0.0",
+  "description": "proyecto de pagina web de bienes raices",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "css": "postcss public/css/tailwind.css -o public/css/app.css --watch"
+  },
+  "keywords": [
+    "MVC",
+    "Pug",
+    "Node",
+    "Express",
+    "MySQL",
+    "Sequelize",
+    "TailwindCSS"
+  ],
+  "author": "Erick Villafuerte",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^2.3.3",
+    "pug": "^3.0.2",
+    "sequelize": "^6.25.6"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "nodemon": "^2.0.20",
+    "postcss": "^8.4.18",
+    "postcss-cli": "^10.0.0",
+    "tailwindcss": "^3.2.1"
+  }
+}
