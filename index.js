@@ -1,9 +1,17 @@
 import express from "express";
+import scrf from  'csurf';
+import cookieParser from "cookie-parser";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import db from "./config/db.js";
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+
+// habilitar cookie parser
+app.use(cookieParser());
+
+// habilitar crsf
+app.use(scrf({cookie: true}));
 
 try {
     await db.authenticate();
