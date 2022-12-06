@@ -1,14 +1,72 @@
 import { check, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import Usuario from '../models/Usuario.js';
-import { generarId } from '../helpers/token.js'
+import { generarId, generarJWT } from '../helpers/token.js'
 import { emailRegistro, emailOlvidePassword } from '../helpers/emails.js'
 
 const formularioLogin = (req, res) => {
     res.render('auth/login', {
-        pagina: 'Iniciar Sesión'
+        pagina: 'Iniciar Sesión',
+        csrfToken: req.csrfToken(),
     });
 };
+
+const autenticar = async(req, res) => {
+    // validacion 
+    await check('email', 'El email no es valildo').isEmail().run(req);
+    await check('password', 'El password es obligatorio').notEmpty().run(req);
+
+    let resultado = validationResult(req);
+    // imprimir errores
+    
+    if(!resultado.isEmpty()){
+        return res.render('auth/login', { 
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: resultado.array(),
+        });
+    }
+
+    // Comprobar si el usuario existe
+    const { email, password } = req.body;
+    const usuario = await Usuario.findOne({where:{email}});
+    if(!usuario){
+        return res.render('auth/login', { 
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: 'El usuario No existe'}],
+        });
+    }
+    // comprobar si el usuario esta confirmado
+    if(!usuario.confirmado){
+        return res.render('auth/login', { 
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: 'Tu cuenta no ha sido confirmada'}],
+        });
+    }
+
+    // comprobar el password
+    if(!usuario.verificarPassword(password)){
+        return res.render('auth/login', { 
+            pagina: 'Iniciar Sesion',
+            csrfToken: req.csrfToken(),
+            errores: [{msg: 'El password es incorrecto'}],
+        });
+    }
+
+    // autenticar al usuario
+    const token = generarJWT({usuario:usuario.id, nombre:usuario.nombre});
+
+    console.log(token);
+
+    // Almacenar en un cookie
+    return res.cookie('_token', token, {
+        httpOnly: true,
+        // secure: true
+    }).redirect('/mis-propiedades');
+}
+
 const formularioRegistro = (req, res) => {
     res.render('auth/registro', { 
         pagina: 'Crear Cuenta' ,
@@ -207,5 +265,6 @@ export {
     confirmar,
     resetPassword,
     comprobarToken,
-    nuevoPassword
+    nuevoPassword,
+    autenticar
 }

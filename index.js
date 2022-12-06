@@ -2,6 +2,7 @@ import express from "express";
 import scrf from  'csurf';
 import cookieParser from "cookie-parser";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
+import propiedadesRoutes from "./routes/propiedadesRoutes.js";
 import db from "./config/db.js";
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.static('public'));
 
 // Routing
 app.use('/auth', usuarioRoutes);
+app.use('/', propiedadesRoutes);
 
 app.use((req, res, next) => {
     res.status(404).send('<h1>Page not found</h1>');
