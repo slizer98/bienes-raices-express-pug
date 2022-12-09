@@ -18,15 +18,23 @@ block contenido
                     div 
                         label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="titulo") Titulo de anuncio
                         input#titulo.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(placeholder="Titulo Propiedad, ej. Casa en la Playa" type="text" name="titulo")
+                    div 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="descripcion") Descripcion
+                        textarea#descripcion.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400.resize-none(placeholder="Descripcion de la propiedad" name="descripcion" rows="3")
                     div(class="grid grid-cols-1 md:grid-cols-2 gap-4")
                         div 
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="categoria") Categoria
                             select#categoria.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="categoria")
                                 option(value="") -- Selecciona --
+                                each categoria in categorias
+                                    option(value=categoria.id)= categoria.nombre
                         div 
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="precio") Precio
                             select#precio.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="precio")
                                 option(value="") -- Selecciona --
+                                each precio in precios
+                                    option(value=precio.id)= precio.nombre
+                                    
                     div(class="grid grid-cols-1 md:grid-cols-3 gap-4")
                         div 
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="habitaciones") Habitaciones
@@ -37,20 +45,30 @@ block contenido
                                         option(value=h) #{h++}
 
                         div 
-                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="estacionamiento") Estacionamiento
-                            select#precio.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="estacionamiento")
+                            label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="estacionamientos") Estacionamiento
+                            select#estacionamientos.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="estacionamientos")
                                 option(value="") -- Selecciona --
                                 - let e = 1;
                                     while e <= 4
                                         option(value=e) #{e++}
                         div 
                             label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="wc") WC
-                            select#precio.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="wc")
+                            select#wc.w-full.px-3.py-2.border.border-gray-300.rounded-md.placeholder-gray-400(name="wc")
                                 option(value="") -- Selecciona --
                                 - let n = 1;
                                     while n <= 6
                                         option(value=n) #{n++}
+                    div.border-gray-200.border-t.py-5.space-y-3
+                        h3.text-lg.leading-6.font-medium.text-gray-900 Ubicación 
+                        p.text-gray-600 Arrastra el pin hasta la ubicación correcta de la propiedad
                     #mapa.h-96
+
+                    div 
+                        p.calle 
+
+                    input(type="hidden" name="calle" id="calle")
+                    input(type="hidden" name="lat" id="lat")
+                    input(type="hidden" name="lng" id="lng")
 
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
