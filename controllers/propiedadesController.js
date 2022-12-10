@@ -1,6 +1,5 @@
 import { validationResult } from 'express-validator';
-import Categoria from "../models/Categoria.js";
-import Precio from "../models/Precio.js";
+import { Categoria, Precio, Propiedad } from '../models/index.js';
 
 const admin = (req, res) => {
     res.render('propiedades/admin', {
@@ -21,7 +20,8 @@ const crear = async(req, res) => {
         barra: true,
         csrfToken: req.csrfToken(),
         categorias,
-        precios
+        precios,
+        datos: []
     });
 }
 
@@ -39,8 +39,16 @@ const guardar = async(req, res) => {
             csrfToken: req.csrfToken(),
             categorias,
             precios,
-            errores: resultado.array()
+            errores: resultado.array(),
+            datos: req.body
         })
+    }
+
+    // Crear un registro en la base de datos
+    try {
+        
+    } catch (error) {
+        console.log(error)
     }
 }
 
