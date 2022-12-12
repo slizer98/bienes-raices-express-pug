@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator'
-import { admin, crear, guardar } from '../controllers/propiedadesController.js';
+import { admin, agregarImagen, crear, guardar } from '../controllers/propiedadesController.js';
 import protegerRuta from '../middleware/protegerRuta.js';
 
 const router = express.Router();
@@ -21,5 +21,6 @@ router.post('/propiedades/crear',
     body('lat').notEmpty().withMessage('La Ubicaion en el mapa es obligatoria'),
     guardar
     )
+router.get('/propiedades/agregar-imagen/:id', agregarImagen)    
 
 export default router;
