@@ -40,7 +40,7 @@ const Propiedad = db.define('propiedades', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    image: {
+    imagen: {
         type: DataTypes.STRING,
         allowNull: false,
     },

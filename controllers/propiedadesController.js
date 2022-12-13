@@ -70,7 +70,7 @@ const guardar = async(req, res) => {
             precioId,
             categoriaId,
             usuarioId,
-            image: ''
+            imagen: '',
         })
 
         const { id } = propiedadGuardada;
@@ -82,9 +82,61 @@ const guardar = async(req, res) => {
 }
 
 const agregarImagen = async(req, res) => {
+    const { id } = req.params;
+    
+    // validar que la propiedad exista
+    const propiedad = await Propiedad.findByPk(id);
+    if (!propiedad) {
+        return res.redirect('/mis-propiedades');
+    }
+
+    // validar que la propiedad no este publicada
+    if(propiedad.publicado) {
+        return res.redirect('/mis-propiedades');
+    }
+
+    // validar que la propiedad pertenezca al usuario
+    if(propiedad.usuarioId.toString() !== req.usuario.id.toString()) {
+        return res.redirect('/mis-propiedades');
+    }
+    
     res.render('propiedades/agregar-imagen', {
-        pagina: 'Agregar Imagen',
+        pagina: `Agregar Imagen: ${propiedad.titulo}`,
+        csrfToken: req.csrfToken(),
+        propiedad
     });
+}
+
+const almacenarImagen = async(req, res, next) => {
+    const { id } = req.params;
+    
+    // validar que la propiedad exista
+    const propiedad = await Propiedad.findByPk(id);
+    if (!propiedad) {
+        return res.redirect('/mis-propiedades');
+    }
+
+    // validar que la propiedad no este publicada
+    if(propiedad.publicado) {
+        return res.redirect('/mis-propiedades');
+    }
+
+    // validar que la propiedad pertenezca al usuario
+    if(propiedad.usuarioId.toString() !== req.usuario.id.toString()) {
+        return res.redirect('/mis-propiedades');
+    }
+    try {
+        const imagen = req.file;
+        propiedad.imagen = imagen.filename;
+        propiedad.publicado = true;
+        await propiedad.save();
+        setTimeout(() => {
+            next();
+        }, 3000);
+        
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export {
@@ -92,4 +144,5 @@ export {
     crear,
     guardar,
     agregarImagen,
+    almacenarImagen
 }
