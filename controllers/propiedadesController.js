@@ -3,6 +3,15 @@ import { validationResult } from 'express-validator';
 import { Categoria, Precio, Propiedad } from '../models/index.js';
 
 const admin = async(req, res) => {
+
+    // Leer el query string
+    const { pagina: paginaActual } = req.query;
+
+    const expresion = /[0-9]/;
+    if (!expresion.test(paginaActual)) {
+        return res.redirect('/mis-propiedades?pagina=1');
+    }
+    
     const { id } = req.usuario;
 
     const propiedades = await Propiedad.findAll({
@@ -266,6 +275,27 @@ const eliminar = async(req, res) => {
     res.redirect('/mis-propiedades');
 }
 
+const mostrarPropiedad = async(req, res) => {
+    const { id } = req.params;
+
+    // Comprobar que la propiedad exista
+    const propiedad = await Propiedad.findByPk(id, {
+        include: [
+            { model: Precio, as: 'precio' },
+            { model: Categoria, as: 'categoria' },
+        ]
+    }); 
+    if (!propiedad) {   
+        return res.redirect('/404');
+    }
+    
+    res.render('propiedades/mostrar', {
+        propiedad,
+        pagina: propiedad.titulo
+
+    })
+}
+
 export {
     admin,
     agregarImagen,
@@ -274,5 +304,6 @@ export {
     editar,
     eliminar,
     guardar,
-    guardarCambios
+    guardarCambios,
+    mostrarPropiedad
 }
