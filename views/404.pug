@@ -1,0 +1,11 @@
+extends ./layout/app
+
+block contenido  
+    div
+        h1(class="text-center text-4xl font-extrabold")= pagina
+    //- hacer mas chica la imagen  y centrarla
+    div(class="flex justify-center items-center ")
+        img(src="/assets/404-error.png" alt="404 no encontrado" class="w-1/2")
+    div(class="flex justify-center items-center")
+        a(href="/" class="bg-indigo-600 text-center font-bold text-white p-2 uppercase rounded") Regresar al inicio
+    

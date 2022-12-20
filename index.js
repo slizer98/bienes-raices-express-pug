@@ -35,10 +35,6 @@ app.use('/auth', usuarioRoutes);
 app.use('/', propiedadesRoutes);
 app.use('/api', apiRoutes);
 
-app.use((req, res, next) => {
-    res.status(404).send('<h1>Page not found</h1>');
-});
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Servidor funcionando en el puerto: ${port}, http://localhost:${port}/auth/login`);

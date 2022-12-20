@@ -7,10 +7,10 @@ const router = express.Router();
 router.get('/', inicio);
 
 // Categorias
-router.get('/categoria/:id', categoria);
+router.get('/categorias/:id', categoria);
 
 // Buscador
-router.post('buscador', buscador);
+router.post('/buscador', buscador);
 // pagina 404
 router.get('/404', noEncontrado);
 
