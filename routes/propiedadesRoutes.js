@@ -7,9 +7,11 @@ import {
     crear, 
     editar, 
     eliminar,
+    enviarMensaje,
     guardar,
     guardarCambios,     
-    mostrarPropiedad
+    mostrarPropiedad,
+    verMensajes
 } from '../controllers/propiedadesController.js';
 import protegerRuta from '../middleware/protegerRuta.js';
 import upload from '../middleware/subirImagen.js';
@@ -61,4 +63,12 @@ router.post('/propiedades/eliminar/:id', protegerRuta, eliminar)
 // Area publica
 router.get('/propiedad/:id', identificarUsuario, mostrarPropiedad)
 
+// Almacenar mensajes
+router.post('/propiedad/:id', 
+    identificarUsuario,
+    body('mensaje').isLength({min:15}).withMessage('El mensaje No puede estar vacio o es muy corto'),
+    enviarMensaje
+)
+
+router.get('/mensajes/:id', protegerRuta, verMensajes)
 export default router;

@@ -38,12 +38,30 @@ block contenido
             div(class="p-5")
                 p(class="text-gray font-bold text-xs") Dirección
                     span(id="calle" class="text-gray-800 block text-lg")= propiedad.calle
-            
-                h3(class="text-2xl mt-10 font-extrabold text-gray-600") Vendedor:
-                if !usuario
-                    div(class="flex justify-center gap-2 flex-col")
-                        p Si deseas contactar al vendedor:
-                        a(href="/auth/login" class="text-indigo-600 font-bold") Inicia sesión
+
+                if !esVendedor
+                
+                    h3(class="text-2xl mt-10 font-extrabold text-gray-600") Vendedor:
+                    if enviado 
+                        p(class="bg-green-100 p-2 text-center text-green-600 uppercase font-bold") Mensaje enviado correctamente
+                    else if usuario
+
+                        if errores
+                            div(class="max-w-md mx-auto my-10")
+                                each error in errores 
+                                    p(class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold")= error.msg
+                        form(method="POST")
+                            input(type="hidden" name="_csrf" value=csrfToken) 
+
+                            div(class="space-y-5")
+                                label(for="mensaje") Mensaje:
+                                textarea(name="mensaje" id="mensaje" class="w-full border p-2 border-gray-300 rounded-lg shadow placeholder-gray-400 resize-none" placeholder="Mensaje al vendedor" rows="4")
+                                input(type="submit" value="Enviar mensaje" class="bg-indigo-600 text-white w-full p-2 uppercase text-sm rounded-lg font-bold cursor-pointer ")
+                        
+                    else
+                        div(class="flex justify-center gap-2 flex-col")
+                            p Si deseas contactar al vendedor:
+                            a(href="/auth/login" class="text-indigo-600 font-bold") Inicia sesión
 
 block scripts
     script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
