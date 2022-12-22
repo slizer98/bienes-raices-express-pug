@@ -302,7 +302,7 @@ const eliminar = async(req, res) => {
 
 const mostrarPropiedad = async(req, res) => {
     const { id } = req.params;
-
+    console.log(req.usuario)
     // Comprobar que la propiedad exista
     const propiedad = await Propiedad.findByPk(id, {
         include: [
@@ -318,6 +318,7 @@ const mostrarPropiedad = async(req, res) => {
         propiedad,
         pagina: propiedad.titulo,
         csrfToken: req.csrfToken(),
+        usuario: req.usuario
     })
 }
 
