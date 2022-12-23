@@ -302,6 +302,30 @@ const eliminar = async(req, res) => {
     res.redirect('/mis-propiedades');
 }
 
+// Nodificar el estado de la propiedad
+const cambiarEstado = async(req, res) => {
+    const { id } = req.params;
+    const propiedad = await Propiedad.findByPk(id);
+    
+    if (!propiedad) {
+        return res.redirect('/mis-propiedades');
+    }
+
+    if(propiedad.usuarioId.toString() !== req.usuario.id.toString()) {
+        return res.redirect('/mis-propiedades');
+    }
+    
+    // Actualizar el estado
+    propiedad.publicado = !propiedad.publicado;
+
+    await propiedad.save();
+
+    res.json({
+        resultado: 'ok',
+    });
+    
+}
+
 const mostrarPropiedad = async(req, res) => {
     const { id } = req.params;
     // Comprobar que la propiedad exista
@@ -311,7 +335,7 @@ const mostrarPropiedad = async(req, res) => {
             { model: Categoria, as: 'categoria' },
         ]
     }); 
-    if (!propiedad) {   
+    if (!propiedad || !propiedad.publicado) {   
         return res.redirect('/404');
     }
 
@@ -404,6 +428,7 @@ export {
     admin,
     agregarImagen,
     almacenarImagen,
+    cambiarEstado,
     crear,
     editar,
     eliminar,

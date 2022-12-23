@@ -4,6 +4,7 @@ import {
     admin, 
     agregarImagen, 
     almacenarImagen, 
+    cambiarEstado,
     crear, 
     editar, 
     eliminar,
@@ -59,6 +60,8 @@ router.post('/propiedades/editar/:id',
     )
 
 router.post('/propiedades/eliminar/:id', protegerRuta, eliminar)
+
+router.put('/propiedades/:id', protegerRuta, cambiarEstado)
 
 // Area publica
 router.get('/propiedad/:id', identificarUsuario, mostrarPropiedad)
